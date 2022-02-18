@@ -24,6 +24,11 @@ class User extends Authenticatable
     use SoftDeletes,HasApiTokens, HasFactory, Notifiable;
 
     /**
+     * @var string
+     */
+    protected $dateFormat = 'U';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
