@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\ApplyQueryScopes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -21,7 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class User extends Authenticatable
 {
-    use SoftDeletes,HasApiTokens, HasFactory, Notifiable;
+    use SoftDeletes, HasApiTokens, HasFactory, Notifiable, ApplyQueryScopes;
 
     /**
      * @var string
@@ -57,4 +58,55 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    /**
+     * RELATIONS
+     */
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function visits()
+    {
+        return $this->hasMany(Visit::class);
+    }
+
+
+    /**
+     * SCOPES
+     */
+
+
+    /**
+     * @param $query
+     * @param $deleted
+     * @return mixed
+     */
+    public function scopeFilterByDeleteStatus($query, $deleted)
+    {
+        if (isset($deleted) && !$deleted)
+            $query = $query->whereNull('deleted_at');
+        if (isset($deleted) && $deleted)
+            $query = $query->whereNotNull('deleted_at');
+        return $query;
+    }
+
+    /***
+     * @param $query
+     * @param $keyword
+     * @return mixed
+     */
+    public function scopeFilterByKeyword($query, $keyword)
+    {
+        if (isset($keyword)) {
+            $query->where(function ($subQuery) use ($keyword)
+            {
+                $subQuery->where('name', 'LIKE', '%' . $keyword . '%')
+                    ->orWhere('email', 'LIKE', '%' . $keyword . '%');
+            });
+        }
+        return $query;
+    }
 }
