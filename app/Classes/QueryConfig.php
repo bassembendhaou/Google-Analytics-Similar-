@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Repositories;
+namespace App\Classes;
 
 
 class QueryConfig
@@ -44,6 +44,13 @@ class QueryConfig
      * @var
      */
     protected $perPage;
+
+
+    /**
+     * @var
+     */
+    protected $pagination;
+
 
 
     /**
@@ -195,5 +202,24 @@ class QueryConfig
         $this->page = $page;
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPagination()
+    {
+        return $this->pagination;
+    }
+
+    /**
+     * @param $pagination
+     * @return $this
+     */
+    public function setPagination($pagination)
+    {
+        $this->pagination = $pagination;
+        return $this;
+    }
+
 
 }

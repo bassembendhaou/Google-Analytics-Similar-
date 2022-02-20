@@ -2,7 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Classes\QueryConfig;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class UserRepository
@@ -29,13 +31,30 @@ class UserRepository
 
     /**
      * @param QueryConfig $config
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
     public static function search(QueryConfig $config)
     {
         $query = User::query()->whereHas('visits');
-        User::applyFilters($config->getFilters(),$query);
+        User::applyFilters($config->getFilters(), $query);
         $query = $query->orderBy($config->getOrderBy(), $config->getDirection());
+        if (!$config->getPagination())
+            return $query->get();
         return $query->paginate($config->getPerPage(), $config->getColumns(), 'page', $config->getPage());
     }
+
+    /**
+     * @return bool
+     */
+    public function delete()
+    {
+        try {
+             $this->user->delete();
+        } catch (\Exception $e) {
+            Log::error("ERROR ON DELETING USER : " . $e->getMessage());
+            return false;
+        }
+        return true;
+    }
+
 }

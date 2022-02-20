@@ -3,7 +3,10 @@
 
 namespace App\Http\Controllers;
 
-
+/**
+ * Class DashboardController
+ * @package App\Http\Controllers
+ */
 class DashboardController extends Controller
 {
 
@@ -24,6 +27,6 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        return view('home');
+        return view('dashboard.index');
     }
 }

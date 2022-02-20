@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\ApplyQueryScopes;
+use App\Traits\SoftDelete;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,10 +20,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string password
  * @property int created_at
  * @property int updated_at
+ * @property int deleted_at
  */
 class User extends Authenticatable
 {
-    use SoftDeletes, HasApiTokens, HasFactory, Notifiable, ApplyQueryScopes;
+    use SoftDeletes,SoftDelete, HasApiTokens, HasFactory, Notifiable, ApplyQueryScopes;
 
     /**
      * @var string

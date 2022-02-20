@@ -4,11 +4,15 @@
 namespace App\Http\Controllers;
 
 
-use App\Repositories\QueryConfig;
+use App\Classes\QueryConfig;
+use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 
-
+/**
+ * Class UserController
+ * @package App\Http\Controllers
+ */
 class UserController extends Controller
 {
 
@@ -33,15 +37,16 @@ class UserController extends Controller
             $paginationParams = $this->getPaginationParams($request);
             $config = new QueryConfig();
             $filters = [
-                'by_keyword' => $request->input('keyword'),
-                'by_delete_status' => false
+                'filter_by_keyword' => $request->input('search')['value'],
+                'filter_by_delete_status' => false
             ];
             $config->setColumns(['*'])
                 ->setFilters($filters)
                 ->setOrderBy($paginationParams['ORDER_BY'])
                 ->setDirection($paginationParams['DIRECTION'])
                 ->setPage($paginationParams['PAGE'])
-                ->setPerPage($paginationParams['PER_PAGE']);
+                ->setPerPage($paginationParams['PER_PAGE'])
+                ->setPagination(true);
             $data = UserRepository::search($config);
             $response = [
                 'draw' => $paginationParams['DRAW'],
@@ -54,4 +59,17 @@ class UserController extends Controller
         return view('users.index');
     }
 
+
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete($id)
+    {
+        $user = User::findOrFail($id);
+        $userRepository = new UserRepository($user);
+        if ($userRepository->delete())
+            return response()->json(['status' => 'success', 'message' =>  __('messages.user_deleted')], 200);
+        return response()->json(['status' => 'error', 'message' => __('messages.error_has_occured')], 400);
+    }
 }

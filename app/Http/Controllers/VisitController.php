@@ -4,11 +4,16 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Visit;
 use App\Repositories\QueryConfig;
+use App\Repositories\VisitRepository;
 use Illuminate\Http\Request;
 
 
-
+/**
+ * Class VisitController
+ * @package App\Http\Controllers
+ */
 class VisitController extends Controller
 {
     /**
@@ -28,9 +33,9 @@ class VisitController extends Controller
      */
     public function index(Request $request)
     {
-       /* if ($request->ajax()) {
+        if ($request->ajax()) {
             $paginationParams = $this->getPaginationParams($request);
-            $config = new QueryConfig();
+            $config = new \App\Classes\QueryConfig();
             $filters = [
 
             ];
@@ -39,8 +44,9 @@ class VisitController extends Controller
                 ->setOrderBy($paginationParams['ORDER_BY'])
                 ->setDirection($paginationParams['DIRECTION'])
                 ->setPage($paginationParams['PAGE'])
-                ->setPerPage($paginationParams['PER_PAGE']);
-            $data = VisitController::search($config);
+                ->setPerPage($paginationParams['PER_PAGE'])
+                ->setPagination(true);
+            $data = VisitRepository::search($config);
             $response = [
                 'draw' => $paginationParams['DRAW'],
                 'recordsTotal' => $data->total(),
@@ -48,7 +54,21 @@ class VisitController extends Controller
                 'data' => $data->items()
             ];
             return response()->json($response);
-        }*/
+        }
         return view('visits.index');
+    }
+
+
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete($id)
+    {
+        $visit = Visit::findOrFail($id);
+        $visitRepository = new VisitRepository($visit);
+        if ($visitRepository->delete())
+            return response()->json(['status' => 'success', 'message' =>  __('messages.visit_deleted')], 200);
+        return response()->json(['status' => 'error', 'message' => __('messages.error_has_occured')], 400);
     }
 }

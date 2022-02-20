@@ -14,7 +14,7 @@ class AlterUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->softDeletes();
+            $table->integer('deleted_at')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AlterUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropSoftDeletes();
+            $table->dropColumn('deleted_at');
         });
     }
 }

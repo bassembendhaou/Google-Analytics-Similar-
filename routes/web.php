@@ -21,5 +21,12 @@ Auth::routes();
 
 Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('home');
 Route::get('/home', [App\Http\Controllers\DashboardController::class, 'index'])->name('home');
-Route::get('/visits', [App\Http\Controllers\VisitController::class, 'index'])->name('visits');
-Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users');
+
+Route::group(['prefix' => 'users'], function (){
+    Route::get('/', [App\Http\Controllers\UserController::class, 'index'])->name('users');
+    Route::delete('/{id}', [App\Http\Controllers\UserController::class, 'delete'])->name('users.delete');
+});
+Route::group(['prefix' => 'visits'], function (){
+    Route::get('/', [App\Http\Controllers\VisitController::class, 'index'])->name('visits');
+    Route::delete('/{id}', [App\Http\Controllers\VisitController::class, 'delete'])->name('visits.delete');
+});
