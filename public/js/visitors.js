@@ -79,7 +79,7 @@ var Visitors = function () {
         if (data.user) {
           $('td', row).eq(1).empty().append('<span>' + data.user ? data.user.name : 0);
         } else {
-          $('td', row).eq(1).empty().append('<span>THIS USERS WAS SOFT DELETED</span>');
+          $('td', row).eq(1).empty().append('<span>USER DELETED</span>');
         }
 
         $('td', row).eq(7).empty().append('<span>' + date + '</span>');
