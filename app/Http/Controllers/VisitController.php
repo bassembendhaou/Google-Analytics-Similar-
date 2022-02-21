@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Visit;
 use App\Repositories\QueryConfig;
+use App\Repositories\UserRepository;
 use App\Repositories\VisitRepository;
 use Illuminate\Http\Request;
 
@@ -37,7 +38,8 @@ class VisitController extends Controller
             $paginationParams = $this->getPaginationParams($request);
             $config = new \App\Classes\QueryConfig();
             $filters = [
-
+                'filter_by_keyword' => $request->input('search')['value'],
+                'filter_by_device_type' =>  $request->input('device_type')
             ];
             $config->setColumns(['*'])
                 ->setFilters($filters)
@@ -70,5 +72,27 @@ class VisitController extends Controller
         if ($visitRepository->delete())
             return response()->json(['status' => 'success', 'message' =>  __('messages.visit_deleted')], 200);
         return response()->json(['status' => 'error', 'message' => __('messages.error_has_occured')], 400);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function users(Request $request)
+    {
+        $config = new \App\Classes\QueryConfig();
+        $filters = [
+            'filter_by_keyword' => $request->input('search'),
+        ];
+        $columns = ['id as id', 'name as text'];
+        $orderDirection = 'asc';
+        $orderColumn = 'created_at';
+        $config->setFilters($filters)
+            ->setDirection($orderDirection)
+            ->setOrderBy($orderColumn)
+            ->setColumns($columns)
+            ->setPagination(false);
+        $data = UserRepository::search($config);
+        return response()->json(['items' => $data]);
     }
 }

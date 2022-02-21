@@ -29,4 +29,5 @@ Route::group(['prefix' => 'users'], function (){
 Route::group(['prefix' => 'visits'], function (){
     Route::get('/', [App\Http\Controllers\VisitController::class, 'index'])->name('visits');
     Route::delete('/{id}', [App\Http\Controllers\VisitController::class, 'delete'])->name('visits.delete');
+    Route::get('/users', [App\Http\Controllers\VisitController::class, 'users'])->name('visits.users');
 });

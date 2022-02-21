@@ -1,1 +1,42 @@
+.widget-content {
+  padding: 1rem;
+  flex-direction: row;
+  align-items: center;
+}
 
+.bg-midnight-bloom {
+  background-image: linear-gradient(-20deg, #2b5876 0%, #5D6D7E 100%) !important;
+  border: 0px;
+}
+
+.widget-content .widget-content-wrapper {
+  display: flex;
+  flex: 1;
+  position: relative;
+  align-items: center;
+}
+
+.text-white {
+  color: #fff !important;
+}
+
+.widget-content .widget-content-left .widget-heading {
+  font-weight: 500;
+}
+
+.widget-content .widget-content-left .widget-subheading {
+  opacity: 0.5;
+}
+
+main {
+  background: #f1f4f6;
+}
+
+.widget-content .widget-numbers {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.widget-content .widget-content-right {
+  margin-left: auto;
+}

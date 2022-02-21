@@ -7,7 +7,8 @@ var Visitors = function () {
   //********************************************************************************//
   //                            Global variables
   //********************************************************************************//
-  var $visitsTable = $('#visitsTable'); //********************************************************************************//
+  var $visitsTable = $('#visitsTable');
+  var $deviceTypeSelect = $('#deviceType'); //********************************************************************************//
   //                            Initializations
   //********************************************************************************//
 
@@ -51,7 +52,7 @@ var Visitors = function () {
       }, {
         name: 'browser',
         data: 'browser',
-        orderable: false
+        orderable: true
       }, {
         name: 'created_at',
         data: 'created_at',
@@ -65,6 +66,9 @@ var Visitors = function () {
         url: $visitsTable.data('url'),
         type: 'get',
         dataType: 'json',
+        data: function data(d) {
+          d.device_type = $deviceTypeSelect.val();
+        },
         error: function error(_error) {
           toastr.error(_error.responseJSON.message);
         }
@@ -77,10 +81,60 @@ var Visitors = function () {
       }
     });
   };
+  /*    var initUsersSelect = function(){
+          $(".users").select2({
+              ajax: {
+                  url: usersUrl,
+                  dataType: 'json',
+                  delay: 250,
+                  processResults: function (data) {
+                      return {
+                          results: data.items,
+                      };
+                  },
+                  cache: true
+              },
+              minimumInputLength: 3,
+          });
+      }*/
+  //********************************************************************************//
+  //                            Events
+  //********************************************************************************//
+
+
+  var reloadDataTable = function reloadDataTable() {
+    $visitsTable.DataTable().ajax.reload();
+  };
+
+  var onDeleteClick = function onDeleteClick() {
+    $visitsTable.on("click", ".delete", function (event) {
+      var visitId = $(this).data('id');
+      event.preventDefault();
+      $.ajax({
+        method: 'DELETE',
+        url: deleteVisitUrl.replace('id', visitId)
+      }).done(function (data) {
+        reloadDataTable();
+        toastr.success(data.message);
+      }).fail(function (error) {
+        toastr.error(error.responseJSON.message);
+      });
+    });
+  };
+
+  var onDeviceTypeChange = function onDeviceTypeChange() {
+    $deviceTypeSelect.on('change', function (event) {
+      event.preventDefault();
+      reloadDataTable();
+    });
+  };
 
   return {
     init: function init() {
       initVisitsDatatable();
+      initUsersSelect();
+      onDeleteClick();
+      onDeviceTypeChange();
     }
   };
 }();

@@ -35,8 +35,9 @@ class UserRepository
      */
     public static function search(QueryConfig $config)
     {
-        $query = User::query()->whereHas('visits');
+        $query = User::query();
         User::applyFilters($config->getFilters(), $query);
+        $query = $query->select($config->getColumns());
         $query = $query->orderBy($config->getOrderBy(), $config->getDirection());
         if (!$config->getPagination())
             return $query->get();

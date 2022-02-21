@@ -17,4 +17,5 @@ mix.js('resources/js/users.js', 'public/js/users.js')
     .vue()
     .sass('resources/sass/dashboard.scss', 'public/css/dashboard.css')
     .sass('resources/sass/users.scss', 'public/css/users.css')
-    .sass('resources/sass/visitors.scss', 'public/css/visitors.css');
+    .sass('resources/sass/visitors.scss', 'public/css/visitors.css')
+    .sass('resources/sass/app.scss', 'public/css/app.css');

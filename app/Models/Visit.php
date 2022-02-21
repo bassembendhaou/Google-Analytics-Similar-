@@ -98,18 +98,7 @@ class Visit extends Model
         return $query;
     }
 
-    /**
-     * @param $query
-     * @param $browser
-     * @return mixed
-     */
-    public function scopeFilterByBrowser($query, $browser)
-    {
-        if (isset($browser)) {
-            $query = $query->where('browser', $browser);
-        }
-        return $query;
-    }
+
 
     /**
      * @param $query
@@ -120,6 +109,40 @@ class Visit extends Model
     {
         if (isset($userId)) {
             $query = $query->where('user_id', $userId);
+        }
+        return $query;
+    }
+
+    /**
+     * @param $query
+     * @param $keyword
+     * @return mixed
+     */
+    public function scopeFilterByKeyword($query, $keyword)
+    {
+        if (isset($keyword)) {
+            $query->where(function ($subQuery) use ($keyword)
+            {
+                $subQuery->where('url', 'LIKE', '%' . $keyword . '%')
+                    ->orWhere('ip', 'LIKE', '%' . $keyword . '%')
+                    ->orWhere('ip', 'LIKE', '%' . $keyword . '%')
+                    ->orWhere('country', 'LIKE', '%' . $keyword . '%')
+                    ->orWhere('browser','LIKE', '%' . $keyword . '%');
+            });
+        }
+        return $query;
+    }
+
+
+    /**
+     * @param $query
+     * @param $creationDate
+     * @return mixed
+     */
+    public function scopeFilterByCreationDate($query,$creationDate)
+    {
+        if(isset($creationDate)) {
+            $query->where('created_at', '=', $creationDate);
         }
         return $query;
     }

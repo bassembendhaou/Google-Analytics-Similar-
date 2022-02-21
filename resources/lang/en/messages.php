@@ -22,4 +22,13 @@ return [
     'DESKTOP' => 'Desktop',
     'TABLET' => 'Tablet',
     'SMARTPHONE' => 'Smartphone',
+    'visit_count' => 'Visit count Evolution',
+    'unique_visit_count' => 'Unique Visit count Evolution',
+    'chart_title' => 'Evolution of visits and unique visits during the last 7 days',
+    'total_number' => 'Total number of visits',
+    'unique_number' => 'Number of unique visits',
+    'unique_visit_count_for_desktop' => 'Number of unique visits with Desktop Device',
+    'unique_visit_count_for_tablet' => 'Number of unique visits with Tablet Device',
+    'unique_visit_count_for_smartphone' => 'Number of unique visits with Smartphone Device',
+    'unique_visit_count_per_browser' =>  'Number of unique visits per browser'
 ];

@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class User extends Authenticatable
 {
-    use SoftDeletes,SoftDelete, HasApiTokens, HasFactory, Notifiable, ApplyQueryScopes;
+    use SoftDeletes, SoftDelete, HasApiTokens, HasFactory, Notifiable, ApplyQueryScopes;
 
     /**
      * @var string
@@ -103,12 +103,23 @@ class User extends Authenticatable
     public function scopeFilterByKeyword($query, $keyword)
     {
         if (isset($keyword)) {
-            $query->where(function ($subQuery) use ($keyword)
-            {
+            $query->where(function ($subQuery) use ($keyword) {
                 $subQuery->where('name', 'LIKE', '%' . $keyword . '%')
                     ->orWhere('email', 'LIKE', '%' . $keyword . '%');
             });
         }
+        return $query;
+    }
+
+    /**
+     * @param $query
+     * @param $hasVisits
+     * @return mixed
+     */
+    public function scopeFilterHasVisits($query, $hasVisits)
+    {
+        if (isset($hasVisits) && $hasVisits)
+            return $query->whereHas('visits');
         return $query;
     }
 }

@@ -38,7 +38,7 @@ class UserController extends Controller
             $config = new QueryConfig();
             $filters = [
                 'filter_by_keyword' => $request->input('search')['value'],
-                'filter_by_delete_status' => false
+                'filter_has_visits' => true
             ];
             $config->setColumns(['*'])
                 ->setFilters($filters)
@@ -72,4 +72,5 @@ class UserController extends Controller
             return response()->json(['status' => 'success', 'message' =>  __('messages.user_deleted')], 200);
         return response()->json(['status' => 'error', 'message' => __('messages.error_has_occured')], 400);
     }
+
 }
