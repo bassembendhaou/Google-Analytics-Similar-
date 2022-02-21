@@ -42,6 +42,7 @@ php artisan db:seed
 #####  Extra installed packages 
 
 1- stevebauman/location :   **https://github.com/stevebauman/location**
-I used this package to detect country from IP @.
+I used this package to detect country from IP @. the limitation in this package that it can detect ths country of local ip @.
+
 2- jenssegers/agent : **https://github.com/jenssegers/agent**
 I used this package to detect DEVICE TYPE from IP @.
