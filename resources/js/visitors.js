@@ -51,7 +51,12 @@ var Visitors = function () {
             },
             'createdRow': function (row, data, index) {
                 let date = moment(data.created_at).format('DD-MM-YYYY HH:mm');
-                $('td', row).eq(1).empty().append('<span>' + data.user ? data.user.name : '' + '</span>');
+                if(data.user) {
+                    $('td', row).eq(1).empty().append('<span>' + data.user ? data.user.name : '' + '</span>');
+                }
+                else {
+                    $('td', row).eq(1).empty().append('<span>THIS USERS WAS SOFT DELETED</span>');
+                }
                 $('td', row).eq(7).empty().append('<span>' + date + '</span>');
                 $('td', row).eq(8).empty().append('<span><i style="cursor: pointer" class="delete fa fa-trash" data-id="' + data.id + '" aria-hidden="true"></i></span>');
             },
@@ -59,22 +64,6 @@ var Visitors = function () {
     };
 
 
-/*    var initUsersSelect = function(){
-        $(".users").select2({
-            ajax: {
-                url: usersUrl,
-                dataType: 'json',
-                delay: 250,
-                processResults: function (data) {
-                    return {
-                        results: data.items,
-                    };
-                },
-                cache: true
-            },
-            minimumInputLength: 3,
-        });
-    }*/
 
 
     //********************************************************************************//
@@ -113,7 +102,6 @@ var Visitors = function () {
     return {
         init: function () {
             initVisitsDatatable();
-            initUsersSelect();
             onDeleteClick();
             onDeviceTypeChange();
         },

@@ -39,6 +39,7 @@
     </div>
 @endsection
 
+
 @section('scripts')
     <script>
         var deleteVisitUrl = '{{route('visits.delete',['id' => 'id'])}}';
@@ -51,7 +52,8 @@
 @endsection
 
 @section('styles')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"/>
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css"/>
     <link href="{{ asset('css/visitors.css') }}" rel="stylesheet">

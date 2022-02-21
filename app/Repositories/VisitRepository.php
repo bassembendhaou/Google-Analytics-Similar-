@@ -62,13 +62,36 @@ class VisitRepository
     }
 
 
+    /***
+     * @param array $attributes
+     * @return bool
+     */
+    public function create(array $attributes)
+    {
+        try {
+            $this->visit->device_type = $attributes['device_type'];
+            $this->visit->browser = $attributes['browser'];
+            $this->visit->ip = $attributes['ip'];
+            $this->visit->country = $attributes['country'];
+            $this->visit->user_agent = $attributes['user_agent'];
+            $this->visit->url = $attributes['url'];
+            $this->visit->user_id = auth()->user()->id;
+            $this->visit->save();
+        } catch (\Exception $e) {
+            Log::error("ERROR ON CREATING VISIT : " . $e->getMessage());
+            return false;
+        }
+        return true;
+    }
+
+
     /**
      * @return array
      */
     public static function getVisitsCountEvolutionsLastSevenDays()
     {
         $days = getLastSevenDays();
-        foreach ($days as $day){
+        foreach ($days as $day) {
             $data [] = Visit::query()->filterByCreationDate($day)->count();
         }
         return array_reverse($data);
@@ -80,7 +103,7 @@ class VisitRepository
     public static function getUniqueVisitsCountEvolutionsLastSevenDays()
     {
         $days = getLastSevenDays();
-        foreach ($days as $day){
+        foreach ($days as $day) {
             $data [] = Visit::query()->filterByCreationDate($day)->get()->groupBy('ip')->count();
         }
         return array_reverse($data);
@@ -108,14 +131,14 @@ class VisitRepository
      */
     public static function getUniqueVisitsPerDevice()
     {
-       $nbrVisitsUniqueDesktop = Visit::query()->filterByDeviceType(Visit::DEVICE_TYPE['DESKTOP'])->get()->groupBy('device_type')->count();
-       $nbrVisitsUniqueTablet = Visit::query()->filterByDeviceType(Visit::DEVICE_TYPE['TABLET'])->get()->groupBy('ip')->count();
-       $nbrVisitsUniqueSmartphone = Visit::query()->filterByDeviceType(Visit::DEVICE_TYPE['SMARTPHONE'])->get()->groupBy('ip')->count();
-       return [
-           'nbrVisitsUniqueDesktop' => $nbrVisitsUniqueDesktop,
-           'nbrVisitsUniqueTablet' => $nbrVisitsUniqueTablet,
-           'nbrVisitsUniqueSmartphone' => $nbrVisitsUniqueSmartphone,
-       ];
+        $nbrVisitsUniqueDesktop = Visit::query()->filterByDeviceType(Visit::DEVICE_TYPE['DESKTOP'])->get()->groupBy('device_type')->count();
+        $nbrVisitsUniqueTablet = Visit::query()->filterByDeviceType(Visit::DEVICE_TYPE['TABLET'])->get()->groupBy('ip')->count();
+        $nbrVisitsUniqueSmartphone = Visit::query()->filterByDeviceType(Visit::DEVICE_TYPE['SMARTPHONE'])->get()->groupBy('ip')->count();
+        return [
+            'nbrVisitsUniqueDesktop' => $nbrVisitsUniqueDesktop,
+            'nbrVisitsUniqueTablet' => $nbrVisitsUniqueTablet,
+            'nbrVisitsUniqueSmartphone' => $nbrVisitsUniqueSmartphone,
+        ];
     }
 
 
